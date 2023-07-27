@@ -13,6 +13,8 @@ aioredis = "^2.0.1"
 environs = "^9.5.0"
 transliterate = "^1.10.2"
 aiohttp = "^3.8.5"
+pydantic = "^2.1.1"
+pillow = "9.5.0"
 
 
 [build-system]

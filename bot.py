@@ -12,9 +12,16 @@ from tgbot.handlers.news import register_news
 from tgbot.handlers.user import register_user
 from tgbot.handlers.weather import register_weather
 from tgbot.middlewares.environment import EnvironmentMiddleware
+from tgbot.middlewares.integrations import IntegrationMiddleware
 from tgbot.misc.set_bot_commands import set_default_commands
+from tgbot.services.aiohttp_service import AiohttpService
 
 logger = logging.getLogger(__name__)
+
+
+async def on_shutdown(dp: Dispatcher):
+    service: AiohttpService = dp.bot["service"]
+    await service.close()
 
 
 def register_all_middlewares(dp, config):
@@ -43,9 +50,12 @@ async def main():
 
     storage = RedisStorage2() if config.tg_bot.use_redis else MemoryStorage()
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+    service = AiohttpService()
     dp = Dispatcher(bot, storage=storage)
+    dp.middleware.setup(IntegrationMiddleware(service))
 
     bot['config'] = config
+    bot['service'] = service
 
     register_all_middlewares(dp, config)
     register_all_filters(dp)
@@ -60,6 +70,7 @@ async def main():
         await dp.storage.close()
         await dp.storage.wait_closed()
         await bot.session.close()
+        await on_shutdown(dp)
 
 
 if __name__ == '__main__':

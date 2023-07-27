@@ -21,7 +21,8 @@ class TgBot:
 
 @dataclass
 class Miscellaneous:
-    other_params: str = None
+    weather_token: str
+    news_token: str
 
 
 @dataclass
@@ -48,5 +49,8 @@ def load_config(path: str = None):
             database=env.str('DB_NAME'),
             port=env.str('DB_PORT'),
         ),
-        misc=Miscellaneous()
+        misc=Miscellaneous(
+            weather_token=env.str('WEATHER_TOKEN'),
+            news_token=env.str('NEWS_TOKEN'),
+        )
     )
