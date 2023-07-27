@@ -13,3 +13,15 @@ help_inline_keyboard = InlineKeyboardMarkup(
         ]
     ]
 )
+
+news_inline_keyboard = InlineKeyboardMarkup(
+    row_width=1,
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                'Еще одну новость',
+                callback_data=command_callback_data.new(key='news')
+            )
+        ]
+    ]
+)

@@ -4,3 +4,7 @@ class WeatherAPIError(Exception):
 
 class NewsAPIError(Exception):
     pass
+
+
+class TooManyRequestsAPIError(Exception):
+    pass
