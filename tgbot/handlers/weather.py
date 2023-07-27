@@ -18,7 +18,8 @@ async def get_weather(message: Message, service: AiohttpService):
         data = await service.get_weather(city, token)
 
         photo = generate_weather_image(str(path), data)
-        caption = f'Сейчас {data.weather}. Температура: {data.temp}.'
+        caption = (f'Сейчас в городе {data.city} {data.weather}.\n'
+                   f'Температура: {data.temp}. Время в городе: {data.time}')
 
         return await message.answer_photo(photo, caption=caption)
     except WeatherAPIError:
