@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.db import models
 
 from .abstracts import TimeBasedModel
@@ -15,6 +16,10 @@ class Profile(TimeBasedModel):
     username = models.CharField(
         'Псевдоним', max_length=70, unique=True, null=True, blank=True
     )
+    avatar_url = models.CharField(
+        'Аватар', max_length=80, default='https://i.ibb.co/y68FLSn/anonymous.png'
+    )
+    is_admin = models.BooleanField(default=False)
 
     def __str__(self):
         return self.profile_name
@@ -33,26 +38,48 @@ class Message(TimeBasedModel):
         ordering = ('-created_at', '-updated_at')
 
     message_id = models.BigIntegerField('Id сообщения', primary_key=True)
+    command = models.CharField(
+        'Команда',
+        max_length=30,
+        validators=[RegexValidator(r'^/[a-zA-Z0-9_]+$')],
+        null=True,
+        blank=True,
+    )
     text = models.TextField('Текст')
     from_user = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name='messages'
     )
 
     def __str__(self):
-        return self.text
+        return str(self.message_id)
 
 
-class BotResponse(TimeBasedModel):
+class Response(TimeBasedModel):
     class Meta:
         verbose_name_plural = 'Ответы бота'
         verbose_name = 'Ответ бота'
         ordering = ('-created_at', '-updated_at')
 
     message_id = models.BigIntegerField('Id сообщения', primary_key=True)
-    response = models.TextField('Текст')
-    from_command = models.OneToOneField(
-        Message, on_delete=models.CASCADE, verbose_name='Команда'
+    text = models.TextField('Текст')
+    photo_url = models.CharField(
+        'Ссылка на изображение', max_length=150, null=True, blank=True
     )
 
     def __str__(self):
         return str(self.message_id)
+
+
+class MessageResponse(TimeBasedModel):
+    class Meta:
+        verbose_name_plural = 'Сообщении - ответы'
+        verbose_name = 'Сообщение - ответ'
+        ordering = ('-created_at', '-updated_at')
+
+    message = models.OneToOneField(Message, on_delete=models.CASCADE)
+    response = models.OneToOneField(
+        Response, on_delete=models.CASCADE, null=True, blank=True
+    )
+
+    def __str__(self):
+        return f'{self.message} - {self.response}'

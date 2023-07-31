@@ -5,14 +5,20 @@ from aiogram.types import Message, CallbackQuery
 
 from tgbot.keyboards.callback_datas import command_callback_data
 from tgbot.keyboards.inline import news_inline_keyboard
+from tgbot.models.db_commands import add_message_response
 from tgbot.services.aiohttp_service import AiohttpService
 from tgbot.services.exceptions import NewsAPIError, TooManyRequestsAPIError
 
 
 async def get_news(update: Union[Message, CallbackQuery], service: AiohttpService):
+    profile_id = update.from_user.id
+
     if isinstance(update, CallbackQuery):
         await update.answer()
+        text = '/news'
         update = update.message
+    else:
+        text = update.text
 
     token = update.bot.get('config').misc.news_token
 
@@ -24,6 +30,15 @@ async def get_news(update: Union[Message, CallbackQuery], service: AiohttpServic
                    f'{news.text}\n\n'
                    f'Ссылка на статью📬: {news.url}')
 
+        await add_message_response(
+            update.message_id,
+            text,
+            caption,
+            news.image,
+            profile_id,
+            '/news',
+        )
+
         return await update.answer_photo(
             photo=news.image,
             caption=caption,
@@ -33,7 +48,8 @@ async def get_news(update: Union[Message, CallbackQuery], service: AiohttpServic
         return await update.answer('Не нашел новость')
     except TooManyRequestsAPIError:
         return await update.answer('Вы превысили лимит запросов.')
-    except Exception:
+    except Exception as err:
+        print(err)
         return await update.answer('Что-то пошло не так')
 
 

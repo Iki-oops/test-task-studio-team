@@ -5,6 +5,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
 
+import django_setup
 from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.echo import register_echo
@@ -13,6 +14,7 @@ from tgbot.handlers.user import register_user
 from tgbot.handlers.weather import register_weather
 from tgbot.middlewares.environment import EnvironmentMiddleware
 from tgbot.middlewares.integrations import IntegrationMiddleware
+from tgbot.middlewares.users_manager import UsersManagerMiddleware
 from tgbot.misc.set_bot_commands import set_default_commands
 from tgbot.services.aiohttp_service import AiohttpService
 
@@ -26,6 +28,7 @@ async def on_shutdown(dp: Dispatcher):
 
 def register_all_middlewares(dp, config):
     dp.setup_middleware(EnvironmentMiddleware(config=config))
+    dp.setup_middleware(UsersManagerMiddleware())
 
 
 def register_all_filters(dp):

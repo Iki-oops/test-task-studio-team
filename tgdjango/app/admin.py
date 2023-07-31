@@ -1,26 +1,31 @@
 from django.contrib import admin
 
-from .models import Profile, Message, BotResponse
+from .models import Profile, Message, Response, MessageResponse
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('telegram_id', 'first_name', 'last_name', 'username')
-    search_fields = ('username', 'first_name', 'last_name',)
+    list_display = ('telegram_id', 'first_name', 'last_name', 'username', 'is_admin',)
+    search_fields = ('username', 'first_name', 'last_name', 'is_admin',)
     empty_value_display = '--empty--'
 
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('message_id', 'text', 'from_user', 'created_at')
+    list_display = ('message_id', 'command', 'text', 'from_user', 'created_at', 'updated_at')
     list_filter = ('from_user', 'text',)
     empty_value_display = '--empty--'
 
 
-@admin.register(BotResponse)
-class BotResponseAdmin(admin.ModelAdmin):
+@admin.register(Response)
+class ResponseAdmin(admin.ModelAdmin):
     list_display = (
-        'message_id', 'response', 'from_command', 'created_at', 'updated_at'
+        'message_id', 'text', 'photo_url', 'created_at', 'updated_at'
     )
-    list_filter = ('from_command',)
+    empty_value_display = '--empty--'
+
+
+@admin.register(MessageResponse)
+class MessageResponse(admin.ModelAdmin):
+    list_display = ('message', 'response')
     empty_value_display = '--empty--'

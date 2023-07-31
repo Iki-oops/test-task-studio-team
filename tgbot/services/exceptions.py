@@ -8,3 +8,7 @@ class NewsAPIError(Exception):
 
 class TooManyRequestsAPIError(Exception):
     pass
+
+
+class TelegraphAPIError(Exception):
+    pass
