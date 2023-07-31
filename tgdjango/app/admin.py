@@ -1,12 +1,19 @@
 from django.contrib import admin
 
-from .models import Profile, Message, Response, MessageResponse
+from .models import Profile, Message, Response, MessageResponse, Command
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('telegram_id', 'first_name', 'last_name', 'username', 'is_admin',)
     search_fields = ('username', 'first_name', 'last_name', 'is_admin',)
+    empty_value_display = '--empty--'
+
+
+@admin.register(Command)
+class CommandAdmin(admin.ModelAdmin):
+    list_display = ('id', 'command', 'text',)
+    search_fields = ('command',)
     empty_value_display = '--empty--'
 
 

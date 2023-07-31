@@ -31,6 +31,20 @@ class Profile(TimeBasedModel):
         return self.username
 
 
+class Command(models.Model):
+    class Meta:
+        verbose_name_plural = 'Команды'
+        verbose_name = 'Команда'
+        ordering = ('id',)
+
+    command = models.CharField(
+        'Команда',
+        max_length=30,
+        validators=[RegexValidator(r'^/[a-zA-Z0-9_]+$')],
+    )
+    text = models.TextField()
+
+
 class Message(TimeBasedModel):
     class Meta:
         verbose_name_plural = 'Сообщения'

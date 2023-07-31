@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import Header from "../../componets/Header";
 import BarChart from "../../componets/BarChart";
 import { useTheme } from "@emotion/react";

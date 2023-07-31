@@ -8,12 +8,9 @@ import Sidebar from "./scenes/global/Sidebar";
 import HistoryMessages from "./scenes/historyMessages";
 
 import './index.scss';
-
-// import Form from '.scenes/form';
-// import Team from './scenes/team';
-// import Contacts from './scenes/contacts';
-// import FAQ from './scenes/faq';
-// import Calendar from './scenes/calendar';
+import AboutTeam from "./scenes/aboutTeam";
+import FAQ from "./scenes/faq";
+import ChangeCommand from "./scenes/changeCommand";
 
 
 function App() {
@@ -29,13 +26,11 @@ function App() {
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar}/>
             <Routes>
-              <Route path='/' element={<HistoryMessages/>} />
-              <Route path='/dashboard' element={<Dashboard/>} />
-              {/* <Route path='/change-command' element={<Form/>} /> */}
-              {/* <Route path='/team' element={<Team/>} /> */}
-              {/* <Route path='/contacts' element={<Contacts/>} /> */}
-              {/* <Route path='faq' element={<FAQ/>} /> */}
-              {/* <Route path='calendar' element={<Calendar />} /> */}
+              <Route path='/' element={<HistoryMessages />} />
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/change-command' element={<ChangeCommand />} />
+              <Route path='/about-team' element={<AboutTeam />} />
+              <Route path='/faq' element={<FAQ/>} />
             </Routes>
           </main>
         </div>
